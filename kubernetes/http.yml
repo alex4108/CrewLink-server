@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crewlink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: crewlink
+  template:
+    metadata:
+      labels:
+        name: crewlink
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: crewlink
+        image: ottomated/crewlink-server:latest
+        ports:
+            - name: voice
+              containerPort: 9736
+              protocol: TCP
+        env:
+          - name: ADDRESS
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: NAME
+            value: ServerNameHere
+---
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crewlink
+spec:
+  selector:
+    name: crewlink
+  ports:
+  - protocol: TCP
+    name: crewlink
+    port: 80
+    targetPort: 9736
+  type: LoadBalancer
