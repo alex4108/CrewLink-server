@@ -28,8 +28,6 @@ spec:
           - name: NAME
             value: ServerNameHere
 ---
-
----
 apiVersion: v1
 kind: Service
 metadata:
